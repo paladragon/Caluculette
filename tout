@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>
+            Calculette - By Romain
+        </title>
+        <script>
+            var canvas,ctx,xCursor,yCursor,oCursor
+
+            function init () {
+            canvas = document.getElementById("myCanvas");
+            ctx = canvas.getContext("2d");
+            ctx.fillStyle = "black"
+            xCursor = canvas.width/2
+            yCursor = canvas.height/2
+            
+            ctx.moveTo(xCursor, yCursor);
+
+            oCursor = Math.PI/8
+            }
+
+            function lineTo(n) {
+                const dx = Math.cos(oCursor)*n
+                    const dy = Math.sin(oCursor)*n
+
+                    xCursor += dx
+                    yCursor += dy
+
+                    ctx.lineTo(xCursor, yCursor);
+                    ctx.stroke()
+            }
+
+            function DoAlgo () {
+                const select = document.getElementById("Action_1");
+                const n1 = document.getElementById("number1");
+                const n2 = document.getElementById("number2");
+                
+
+                if (select.value=="valeur1") {
+                    var s = "lineTo("+n1.value+")"
+                    console.log(s)
+                    eval(s)
+                }
+                if (select.value=="valeur2") {
+                    oCursor += n1.value/180*Math.PI
+                }
+                refreshCurseur()
+            }
+
+            function refreshCurseur() {
+                canvasCurseur = document.getElementById("curseur");
+                ctxCurseur = canvasCurseur.getContext("2d");
+                ctxCurseur.clearRect(0,0,200,100)
+                ctxCurseur.strokeStyle  = "green";
+                const dx = Math.cos(oCursor)*20
+                const dy = Math.sin(oCursor)*20
+                ctxCurseur.beginPath()
+                ctxCurseur.moveTo(xCursor, yCursor);
+                ctxCurseur.lineTo(xCursor+dx, yCursor+dy);
+                ctxCurseur.closePath()
+                ctxCurseur.stroke() 
+                
+                ctxCurseur.beginPath()
+                ctxCurseur.moveTo(xCursor+dx, yCursor+dy);
+                ctxCurseur.strokeStyle  = "red"; 
+                ctxCurseur.lineTo(xCursor+dx+1, yCursor+dy+1);
+                ctxCurseur.closePath()
+                ctxCurseur.stroke() 
+            }
+        </script>
+    </head>
+    <body onload="init()">
+        Ici, on fait des algo !
+        <select id="Action_1">
+            <option value="valeur1" selected>Avancer de </option>
+            <option value="valeur2">Tourner de </option>
+            <option value="valeur3">S'orienter à </option>
+            <option value="valeur4">Aller à x;y </option>
+            <option value="valeur5">Stylo écrit </option>
+            <option value="valeur6">Stylo relevé </option>
+            <option value="valeur7">Mettre var à </option>
+            <option value="valeur8">Demander valeur </option>
+        </select>
+        <input id="number1" type="number">
+        <input id="number2" type="number">
+        <button id="button" type="button" onclick="DoAlgo()">Entrer</button>
+
+        <div style="position: relative;">
+            <canvas id="myCanvas" width="200" height="100"
+              style="position: absolute; left: 0; top: 0; z-index: 0; border:1px solid black;"></canvas>
+            <canvas id="curseur" width="200" height="100" 
+              style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+        </div>
+    </body>
+</html>
