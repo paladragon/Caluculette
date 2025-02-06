@@ -6,7 +6,7 @@
             Calculette - By Romain
         </title>
         <script>
-            var canvas,ctx,xCursor,yCursor,oCursor,stylo=true
+            var canvas,ctx,xCursor,yCursor,oCursor,stylo=true,l=[],lm=[]
 
             function init () {
                 canvas = document.getElementById("myCanvas");
@@ -129,6 +129,60 @@
                 refreshCurseur()
             }
 
+            function AddAlgo () {
+                const select = document.getElementById("Action_1");
+                const n1 = document.getElementById("number1");
+                const n2 = document.getElementById("number2");
+                const program = document.getElementById("program");
+                
+
+                if (select.value=="valeur1") {
+                    var s2 = "lineTo("+n1.value+")"
+                    console.log(s2)
+                    program.value += s2 + "\n"
+                    l.push(s2)
+                }
+                if (select.value=="valeur2") {
+                    var s2 = "turnTo("+n1.value/180*Math.PI+")"
+                    console.log(s2)
+                    program.value += s2 + "\n"
+                    l.push(s2)
+                }
+                if (select.value=="valeur3") {
+                    var s2 = "headingTo("+(-n1.value/180*Math.PI)+")"
+                    console.log(s2)
+                    program.value += s2 + "\n"
+                    l.push(s2)
+                }
+                if (select.value=="valeur4") {
+                    var s2 = "goTo("+(n1.value)+","+(n2.value)+")"
+                    console.log(s2)
+                    program.value += s2 + "\n"
+                    l.push(s2)
+                }
+                if (select.value=="valeur5") {
+                    var s2 = "styloTrueTo()"
+                    console.log(s2)
+                    program.value += s2 + "\n"
+                    l.push(s2)
+                }
+                if (select.value=="valeur6") {
+                    var s2 = "styloFalseTo()"
+                    console.log(s2)
+                    program.value += s2 + "\n"
+                    l.push(s2)
+                }
+                console.log(l)
+            }
+
+            function RunAlgo () {
+                lm = program.value
+                lm.split("\n").forEach( element => {
+                    console.log(element)
+                    eval(element)
+                });
+            }
+
             function refreshCurseur() {
                 xCursor += canvas.width/2
                 yCursor += canvas.height/2
@@ -172,6 +226,21 @@
         <input id="number1" type="number">
         <input id="number2" type="number">
         <button id="button" type="button" onclick="DoAlgo()">Entrer</button>
+        <button id="button2" type="button" onclick="AddAlgo()">+</button>
+        <button id="button3" type="button" onclick="RunAlgo()">Executer</button>
+        
+        <textarea id="program">lineTo(10)
+turnTo(4.7)
+lineTo(10)
+goTo(-10,10)
+headingTo(0)
+styloFalseTo()
+lineTo(5)
+styloTrueTo()
+lineTo(5)
+styloFalseTo()
+lineTo(150)
+</textarea>
 
         <div style="position: relative;">
             <canvas id="myCanvas" width="200" height="100"
