@@ -81,6 +81,10 @@
                 stylo = false
             }
 
+            function repeatTo(code, iterations) {
+                console.log(code)
+            }
+
             function styloVerif () {
                 if (stylo) {
                     return true
@@ -172,15 +176,40 @@
                     program.value += s2 + "\n"
                     l.push(s2)
                 }
+                if (select.value=="valeur7") {
+                    var s2 = "repeatTo("+n1.value+")"
+                    console.log(s2)
+                    program.value += s2 + "\n\nendRepeat()\n"
+                    l.push(s2)
+                }
                 console.log(l)
             }
 
             function RunAlgo () {
                 lm = program.value
-                lm.split("\n").forEach( element => {
+                l = lm.split("\n")
+                var numLigneCode = 0
+                var ligneDebutRepeat
+                var nbRepeat
+                while (numLigneCode<l.length) {
+                    var element = l[numLigneCode]
                     console.log(element)
-                    eval(element)
-                });
+                    if (element.startsWith("repeatTo")) {
+                        ligneDebutRepeat = numLigneCode+1
+                        nbRepeat = element.replace("repeatTo(", "").replace(")", "")
+                        numLigneCode++
+                    } else if (element.startsWith("endRepeat")) {
+                        nbRepeat--
+                        if (nbRepeat > 0) {
+                            numLigneCode = ligneDebutRepeat
+                        } else {
+                            numLigneCode++
+                        }
+                    } else {
+                        eval(element)
+                        numLigneCode++
+                    }
+                }
             }
 
             function refreshCurseur() {
@@ -220,8 +249,9 @@
             <option value="valeur4">Aller à x;y </option>
             <option value="valeur5">Stylo écrit </option>
             <option value="valeur6">Stylo relevé </option>
-            <option value="valeur7">Mettre var à </option>
-            <option value="valeur8">Demander valeur </option>
+            <option value="valeur7">Répéter </option>
+            <option value="valeur8">Mettre var à </option>
+            <option value="valeur9">Demander valeur </option>
         </select>
         <input id="number1" type="number">
         <input id="number2" type="number">
@@ -229,17 +259,10 @@
         <button id="button2" type="button" onclick="AddAlgo()">+</button>
         <button id="button3" type="button" onclick="RunAlgo()">Executer</button>
         
-        <textarea id="program">lineTo(10)
-turnTo(4.7)
+        <textarea id="program">repeatTo(5)
 lineTo(10)
-goTo(-10,10)
-headingTo(0)
-styloFalseTo()
-lineTo(5)
-styloTrueTo()
-lineTo(5)
-styloFalseTo()
-lineTo(150)
+turnTo(5)
+endRepeat()
 </textarea>
 
         <div style="position: relative;">
