@@ -6,7 +6,7 @@
             Calculette - By Romain
         </title>
         <script>
-            var canvas,ctx,xCursor,yCursor,oCursor,stylo=true,l=[],lm=[]
+            var canvas,ctx,xCursor,yCursor,oCursor,stylo=true,l=[],lm=[],A,B,C,D,E,F,M
 
             function init () {
                 canvas = document.getElementById("myCanvas");
@@ -81,8 +81,22 @@
                 stylo = false
             }
 
-            function repeatTo(code, iterations) {
-                console.log(code)
+            function varTo(variab, n) {
+                if (variab = "A")  {
+                    A = n
+                } else if (variab = "B")  {
+                    B = n
+                } else if (variab = "C")  {
+                    C = n
+                } else if (variab = "D")  {
+                    D = n
+                } else if (variab = "E")  {
+                    E = n
+                } else if (variab = "F")  {
+                    F = n
+                } else if (variab = "M")  {
+                    M = n
+                }
             }
 
             function styloVerif () {
@@ -97,6 +111,7 @@
                 const select = document.getElementById("Action_1");
                 const n1 = document.getElementById("number1");
                 const n2 = document.getElementById("number2");
+                const select2 = document.getElementById("Lettre");
                 
 
                 if (select.value=="valeur1") {
@@ -115,7 +130,7 @@
                     eval(s)
                 }
                 if (select.value=="valeur4") {
-                    var s = "goTo("+(n1.value)+","+(n2.value)+")"
+                    var s = "goTo("+n1.value+","+n2.value+")"
                     console.log(s)
                     eval(s)
                 }
@@ -129,6 +144,11 @@
                     console.log(s)
                     eval(s)
                 }
+                if (select.value=="valeur9") {
+                    var s = "varTo("+letter.value+", "+n1.value+")"
+                    console.log(s)
+                    eval(s)
+                }
 
                 refreshCurseur()
             }
@@ -137,6 +157,7 @@
                 const select = document.getElementById("Action_1");
                 const n1 = document.getElementById("number1");
                 const n2 = document.getElementById("number2");
+                const select2 = document.getElementById("Letter");
                 const program = document.getElementById("program");
                 
 
@@ -180,6 +201,12 @@
                     var s2 = "repeatTo("+n1.value+")"
                     console.log(s2)
                     program.value += s2 + "\n\nendRepeat()\n"
+                    l.push(s2)
+                }
+                if (select.value=="valeur9") {
+                    var s2 = "varTo("+select2.value+", "+n1.value+")"
+                    console.log(s2)
+                    program.value += s2 + "\n"
                     l.push(s2)
                 }
                 console.log(l)
@@ -250,11 +277,21 @@
             <option value="valeur5">Stylo écrit </option>
             <option value="valeur6">Stylo relevé </option>
             <option value="valeur7">Répéter </option>
-            <option value="valeur8">Mettre var à </option>
-            <option value="valeur9">Demander valeur </option>
+            <option value="valeur8">Répéter jusqu'à </option>
+            <option value="valeur9">Mettre var à </option>
+            <option value="valeur10">Demander valeur </option>
         </select>
         <input id="number1" type="number">
         <input id="number2" type="number">
+        <select id="Letter">
+            <option value="A" selected>A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+            <option value="F">F</option>
+            <option value="M">M</option>
+        </select>
         <button id="button" type="button" onclick="DoAlgo()">Entrer</button>
         <button id="button2" type="button" onclick="AddAlgo()">+</button>
         <button id="button3" type="button" onclick="RunAlgo()">Executer</button>
@@ -263,6 +300,20 @@
 lineTo(10)
 turnTo(5)
 endRepeat()
+styloFalseTo()
+goTo(10,10)
+styloTrueTo()
+goTo(-10,10)
+repeatTo(2)
+styloTrueTo()
+headingTo(0.7853981633974483)
+lineTo(14)
+headingTo(0)
+lineTo(-10)
+styloFalseTo()
+goTo(-4,10)
+endRepeat()
+styloTrueTo()
 </textarea>
 
         <div style="position: relative;">
