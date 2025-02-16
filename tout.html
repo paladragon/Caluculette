@@ -82,20 +82,49 @@
             }
 
             function varTo(variab, n) {
-                if (variab = "A")  {
+                if (variab == "A")  {
                     A = n
-                } else if (variab = "B")  {
+                } else if (variab == "B")  {
                     B = n
-                } else if (variab = "C")  {
+                } else if (variab == "C")  {
                     C = n
-                } else if (variab = "D")  {
+                } else if (variab == "D")  {
                     D = n
-                } else if (variab = "E")  {
+                } else if (variab == "E")  {
                     E = n
-                } else if (variab = "F")  {
+                } else if (variab == "F")  {
                     F = n
-                } else if (variab = "M")  {
+                } else if (variab == "M")  {
                     M = n
+                }
+            }
+
+            function ifTo(l, o, n) {
+                console.log(l+" ; "+o+" ; "+n)
+                if (o = "E")  {
+                    if (l = n)  {
+                        return true
+                    } else {
+                        return false
+                    }
+                } else if (o = "D")  {
+                    if (l != n)  {
+                        return true
+                    } else {
+                        return false
+                    }
+                } else if (o = "I")  {
+                    if (l < n)  {
+                        return true
+                    } else {
+                        return false
+                    }
+                } else  if (o = "S")  {
+                    if (l > n)  {
+                        return true
+                    } else {
+                        return false
+                    }
                 }
             }
 
@@ -112,6 +141,7 @@
                 const n1 = document.getElementById("number1");
                 const n2 = document.getElementById("number2");
                 const select2 = document.getElementById("Lettre");
+                const op = document.getElementById("operator");
                 
 
                 if (select.value=="valeur1") {
@@ -145,7 +175,7 @@
                     eval(s)
                 }
                 if (select.value=="valeur9") {
-                    var s = "varTo("+letter.value+", "+n1.value+")"
+                    var s = "varTo('"+letter.value+"', "+n1.value+")"
                     console.log(s)
                     eval(s)
                 }
@@ -159,7 +189,7 @@
                 const n2 = document.getElementById("number2");
                 const select2 = document.getElementById("Letter");
                 const program = document.getElementById("program");
-                
+                const op = document.getElementById("Operator");
 
                 if (select.value=="valeur1") {
                     var s2 = "lineTo("+n1.value+")"
@@ -204,9 +234,15 @@
                     l.push(s2)
                 }
                 if (select.value=="valeur9") {
-                    var s2 = "varTo("+select2.value+", "+n1.value+")"
+                    var s2 = "varTo('"+select2.value+"', "+n1.value+")"
                     console.log(s2)
                     program.value += s2 + "\n"
+                    l.push(s2)
+                }
+                if (select.value=="valeur11") {
+                    var s2 = "ifTo("+select2.value+","+op.value+","+n1.value+")"
+                    console.log(s2)
+                    program.value += s2 + "\n\nendIf()\n"
                     l.push(s2)
                 }
                 console.log(l)
@@ -218,6 +254,10 @@
                 var numLigneCode = 0
                 var ligneDebutRepeat
                 var nbRepeat
+                var e
+                var le = []
+                var fi = true
+
                 while (numLigneCode<l.length) {
                     var element = l[numLigneCode]
                     console.log(element)
@@ -232,12 +272,49 @@
                         } else {
                             numLigneCode++
                         }
+                    } else if (element.startsWith("ifTo")) {
+                        e = /ifTo\(([^,]+),([^,]+),([^\)]+)\)/
+                        le = element.match(e)
+                        if (eval(eval(le[1])) == 1*le[3]) {
+                            fi = true
+                        } else {
+                            fi = false
+                        }
+                        console.log("fi : "+fi)
+                        numLigneCode++
+                    } else if (element.startsWith("endIf")) {
+                        fi = true
+                        numLigneCode++
                     } else {
-                        eval(element)
+                        console.log(fi)
+                        if (fi == true) {
+                            eval(element)
+                        }
                         numLigneCode++
                     }
                 }
             }
+
+            /*varTo(A, 10)
+repeatTo(5)
+lineTo(A)
+turnTo(5)
+endRepeat()
+styloFalseTo()
+goTo(10,10)
+styloTrueTo()
+goTo(-10,10)
+repeatTo(2)
+styloTrueTo()
+headingTo(0.7853981633974483)
+lineTo(A+4)
+headingTo(0)
+lineTo(-A)
+styloFalseTo()
+goTo(-4,10)
+endRepeat()
+styloTrueTo()
+*/
 
             function refreshCurseur() {
                 xCursor += canvas.width/2
@@ -280,9 +357,9 @@
             <option value="valeur8">Répéter jusqu'à </option>
             <option value="valeur9">Mettre var à </option>
             <option value="valeur10">Demander valeur </option>
+            <option value="valeur11">Si alors </option>
+            <option value="valeur12">Si alors sinon </option>
         </select>
-        <input id="number1" type="number">
-        <input id="number2" type="number">
         <select id="Letter">
             <option value="A" selected>A</option>
             <option value="B">B</option>
@@ -292,29 +369,22 @@
             <option value="F">F</option>
             <option value="M">M</option>
         </select>
+        <select id="Operator">
+            <option value="=" selected>=</option>
+            <option value="≠">≠</option>
+            <option value="<"><</option>
+            <option value=">">></option>
+        </select>
+        <input id="number1" type="number">
+        <input id="number2" type="number">
         <button id="button" type="button" onclick="DoAlgo()">Entrer</button>
         <button id="button2" type="button" onclick="AddAlgo()">+</button>
         <button id="button3" type="button" onclick="RunAlgo()">Executer</button>
         
-        <textarea id="program">varTo(A, 10)
-repeatTo(5)
-lineTo(A)
-turnTo(5)
-endRepeat()
-styloFalseTo()
-goTo(10,10)
-styloTrueTo()
-goTo(-10,10)
-repeatTo(2)
-styloTrueTo()
-headingTo(0.7853981633974483)
-lineTo(A+4)
-headingTo(0)
-lineTo(-A)
-styloFalseTo()
-goTo(-4,10)
-endRepeat()
-styloTrueTo()            
+        <textarea id="program">varTo('A', 1)
+ifTo('A', =, 1)
+lineTo(59)
+endIf()
 </textarea>
 
         <div style="position: relative;">
